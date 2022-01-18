@@ -1,0 +1,11 @@
+---
+- name: add user on remote machine
+  hosts: prod
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: add user alec
+    user:
+      name: alec
+      uid: 4001
+      state: present
