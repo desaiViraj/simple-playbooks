@@ -1,6 +1,7 @@
 ---
 - name: Install and start apache server
   hosts: prod
+  become: yes
   tasks:
     - name: http is present
       yum:
