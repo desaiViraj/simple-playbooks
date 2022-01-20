@@ -1,0 +1,36 @@
+---
+- name: Enable Intranet services
+  hosts: prod
+  become: yes
+  tasks:
+    - name: install latest version of httpd
+      yum:
+        name: 
+          - httpd
+          - firewalld
+        state: latest
+    - name: test html page
+      copy:
+        content: "Welcome to INTRA ZONE"
+        dest: /var/www/html/index.html
+    - name: start firewalld service
+      service:
+        name: firewalld
+        enabled: true
+        state: started
+    - name: Allow httpd service
+      firewalld:
+        service: httpd
+        permanent: true
+        state: enabled
+        immediate: yes
+
+- name: Test WEB
+  hosts: localhost
+  become: no
+  tasks:
+    - name: connect to intranet
+      uri:
+       url: http://65.2.152.253
+       return_content: yes
+       status_code: 200
