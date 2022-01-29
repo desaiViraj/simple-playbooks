@@ -1,0 +1,12 @@
+---
+- name: Install marialDB if root space is more than 300MB
+  hosts: prod
+  become: yes
+  become_user: root
+  tasks:
+  - name: Install
+    yum:
+      name: mariadb-server
+      state: latest
+    loop: "{{ ansible_mounts }}"
+    when: item.mount == "/" and item.size_available > 300000000
